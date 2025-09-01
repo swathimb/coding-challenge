@@ -3,6 +3,8 @@ import axios from 'axios';
 export default {
   getPlanets,
   getPeople,
+  getPerson,
+  getPlanet
 };
 
 function getPlanets() {
@@ -20,4 +22,12 @@ function getPeople() {
       sortBy: 'name',
     }
   });
+}
+
+function getPerson(personId) {
+  return axios.get(`/api/starWars/people/${personId}`);
+}
+
+function getPlanet(planetId) {
+  return axios.get(`/api/starWars/planets/${planetId}`);
 }

@@ -7,6 +7,7 @@ module.exports = {
   getPeople,
   getPlanets,
   getPlanetsWithResidents,
+  getPlanet
 };
 
 async function getPeople(sortBy) {
@@ -19,6 +20,11 @@ async function getPlanets(sortBy) {
   const rootApi = api + '/planets';
   const cacheKey = 'planets';
   return getResults(rootApi, cacheKey);
+}
+
+async function getPlanet(planetId) {
+  const rootApi = api + '/planets' + `/${planetId}`;
+  return getResult(rootApi);
 }
 
 async function getPlanetsWithResidents() {
@@ -42,35 +48,39 @@ async function getPlanetsWithResidents() {
 
 
 /* helper methods */
-async function getResults(rootApi, cacheKey) {
+async function getResults(rootApi, cacheKey, page = 1) {
   const startTime = new Date().valueOf();
 
   if (!cache[cacheKey]) {
     cache[cacheKey] = {};
   }
 
-  async function getPage(nextPage, skipNext = true) {
+  async function getPage(nextPage) {
     const { data } = await axios.get(nextPage);
-    data.results.forEach(item => {
+    console.log(data)
+    data.results && data.results.forEach(item => {
       const id = item.url.replace(rootApi, '').replace(/\//g, '');
       item.id = parseInt(id); // make things easier for the front-end
       cache[cacheKey][id] = item;
     });
-    if (!skipNext && data.next) {
-      return getPage(data.next, false);
-    } else {
-      return data;
-    }
+    return data;
   }
 
-  if (Object.keys(cache[cacheKey]).length === 0) {
-    await getPage(rootApi);
-  } else {
-    console.log(`"${cacheKey}" | pulling from existing cache`);
-  }
+  // const url = `${rootApi}/?page=${page}`;
+  const data = await getPage(rootApi);
 
   // return as frozen object so any mutating won't affect the cache in this file
   const toReturn = Object.freeze(cache[cacheKey]);
   console.log(`"${cacheKey}" | timing: ${new Date().valueOf() - startTime} | result count: ${Object.values(toReturn).length}`);
-  return toReturn;
+  // return toReturn;
+  return {
+    count: data.count,
+    next: data.next,
+    previous: data.previous,
+    results: data.results,
+  };
+}
+
+async function getResult(rootApi) {
+  return await axios.get(rootApi);
 }

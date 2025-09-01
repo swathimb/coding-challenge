@@ -34,17 +34,21 @@ const StarWarsStore = model('StarWarsStore', {
       const { data } = await apiService.getPlanets();
       self.setLoadingPlanets(false);
       if (!skipSetting) {
-        self.setPlanets(data);
+        self.setPlanets(data.results);
+        // self.setPlanets(data);
       } else {
-        return data;
+        // return data;
+        return data.results;
       }
     },
     async fetchPeople() {
       self.setLoadingPeople(true);
       const { data } = await apiService.getPeople();
       self.setLoadingPeople(false);
-      self.setPeople(data);
-      return data;
+      self.setPeople(data.results);
+      return data.results;
+      // self.setPeople(data);
+      // return data;
     },
 
     setLoadingPlanets(bool) {
