@@ -1,4 +1,4 @@
-import { useMst } from '../../stores/StoreProvider';
+import { useMst } from '../../stores/StoreProvider.js';
 import { Link } from 'react-router-dom';
 
 const Pagination = () => {

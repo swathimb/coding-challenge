@@ -1,8 +1,8 @@
 import { types, getSnapshot } from 'mobx-state-tree';
 
-import apiService from '../services/api';
-import PlanetModel from '../models/Planet.model';
-import PersonModel from '../models/Person.model';
+import apiService from '../services/api.js';
+import PlanetModel from '../models/Planet.model.js';
+import PersonModel from '../models/Person.model.js';
 
 const { model, array, optional, map, boolean } = types;
 

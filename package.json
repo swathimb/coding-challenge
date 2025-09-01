@@ -39,5 +39,6 @@
     "webpack-dev-middleware": "^5.3.3",
     "webpack-dev-server": "^4.9.2",
     "webpack-hot-middleware": "^2.25.1"
-  }
+  },
+  "type": "module"
 }

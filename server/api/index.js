@@ -1,9 +1,11 @@
-const router = require('express').Router();
+import express from 'express'
+import starWarRoutes from './starWars.js'
+const router = express.Router();
 
-router.use('/starWars', require('./starWars'));
+router.use('/starWars', starWarRoutes);
 router.get('/*', render404);
 
-module.exports = router;
+export default router
 
 function render404(req, res) {
   res.status(404).json({ error: 'not found' });

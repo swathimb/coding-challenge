@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
-import { useMst } from '../../stores/StoreProvider';
-import PageTitle from '../components/PageTitle';
+import { useMst } from '../../stores/StoreProvider.js';
+import PageTitle from '../components/PageTitle.jsx';
 import styles from './people.scss';
 
 const People = () => {

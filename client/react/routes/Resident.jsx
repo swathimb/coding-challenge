@@ -2,9 +2,9 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import styles from './resident.scss';
-import { useMst } from '../../stores/StoreProvider';
-import PageTitle from '../components/PageTitle';
-import SubTitle from '../components/SubTitle';
+import { useMst } from '../../stores/StoreProvider.js';
+import PageTitle from '../components/PageTitle.jsx';
+import SubTitle from '../components/SubTitle.jsx';
 
 const Resident = () => {
   const urlParams = useParams();

@@ -1,13 +1,15 @@
-const { sorter } = require('../utils');
-const starWarsController = require('../controllers/starWars');
+import express from 'express'
 
-const router = require('express').Router();
+import sorter from '../utils.js';
+import starWarsController from '../controllers/starWars.js';
+
+const router = express.Router();
 
 router.get('/planets', getPlanets);
 router.get('/people', getPeople);
 router.get('/planets/:planetId', getPlanet);
 
-module.exports = router;
+export default router;
 
 
 async function getPlanets(req, res) {

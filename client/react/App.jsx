@@ -3,15 +3,15 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import styles from './App.scss';
-import { useMst } from '../stores/StoreProvider';
-import Planet from './routes/Planet';
-import Planets from './routes/Planets';
-import Resident from './routes/Resident';
-import People from './routes/People';
-import Breadcrumbs from './components/Breadcrumbs';
-import CustomCursor from './components/CustomCursor';
-import TopNav from './components/TopNav';
-import Pagination from './components/Pagination';
+import { useMst } from '../stores/StoreProvider.js';
+import Planet from './routes/Planet.jsx';
+import Planets from './routes/Planets.jsx';
+import Resident from './routes/Resident.jsx';
+import People from './routes/People.jsx';
+import Breadcrumbs from './components/Breadcrumbs.jsx';
+import CustomCursor from './components/CustomCursor.jsx';
+import TopNav from './components/TopNav.jsx';
+import Pagination from './components/Pagination.jsx';
 
 const App = () => {
   const { loading } = useMst(store => ({

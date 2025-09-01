@@ -1,6 +1,4 @@
-module.exports = {
-  sorter,
-};
+export default sorter
 
 function sorter(field, objectList, direction = 'asc') {
   const allowedFields = ['mass', 'height', 'name'];

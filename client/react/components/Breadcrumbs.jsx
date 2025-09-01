@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { useMst } from '../../stores/StoreProvider';
+import { useMst } from '../../stores/StoreProvider.js';
 import styles from './breadcrumbs.scss';
 
 const Breadcrumb = ({
