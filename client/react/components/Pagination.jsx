@@ -1,17 +1,19 @@
 import { useMst } from '../../stores/StoreProvider.js';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import styles from './pagination.scss';
 
-const Pagination = () => {
-    const storeValues = useMst(store => ({
-        planets: store.planets,
-        people: store.people
-      }));
-      
+const Pagination = ({section, count}) => {
 
-    console.log(storeValues.people, storeValues.planets)
-
+    let pageNumbers = Math.ceil(count/10)
+    const [searchParams] = useSearchParams();
+    let currentPage = searchParams.get("page");
+    console.log(currentPage, 'currentPage')
     return(
-        <Link  to={'/'}>1</Link>
+        <div className='pagination'>
+        <Link  to={'/'}>{'<'}</Link>
+        { Array(pageNumbers).fill(0).map((_, i) => <Link  key={i} className= {Number(currentPage) === i + 1 ? 'activePage' : ''} to={`?page=${i+1}`}>{i + 1}</Link>)}
+        <Link  to={'/'}>{'>'}</Link>
+        </div>
     )
 
 }

@@ -14,7 +14,7 @@ const Planet = model('Planet', {
   climate: string,
   terrain: string,
   surface_water: string,
-  residents: array(maybeNull(PersonModel)),
+  residents: array(string),
   films: array(string),
   url: string,
   created: string,

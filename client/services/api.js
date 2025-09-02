@@ -7,21 +7,28 @@ export default {
   getPlanet
 };
 
-function getPlanets() {
+function getPlanets(page) {
+  let queryParameters = {
+    sortBy: 'name',
+    replacePeopleNames: 'false',
+  }
+  if (page) {
+    queryParameters.page = page;
+  }
   return axios.get('/api/starWars/planets', {
-    params: {
-      sortBy: 'name',
-      replacePeopleNames: false,
-    }
+    params: queryParameters
   });
 }
 
-function getPeople() {
-  return axios.get('/api/starWars/people', {
-    params: {
-      sortBy: 'name',
-    }
-  });
+function getPeople(page) {
+  const rootApi = '/api/starWars/people';
+  let queryParameters = {
+    sortBy: 'name',
+  }
+  if (page) {
+    queryParameters.page = page;
+  }
+  return axios.get(rootApi, { params: queryParameters });
 }
 
 function getPerson(personId) {

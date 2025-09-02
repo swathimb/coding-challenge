@@ -16,15 +16,18 @@ async function getPlanets(req, res) {
   const {
     sortBy,
     replacePeopleNames = 'true',
+    page
   } = req.query;
 
   let planetList;
   let planets;
   try {
     if (replacePeopleNames === 'true') {
-      planetList = await starWarsController.getPlanetsWithResidents();
+      planetList = await starWarsController.getPlanetsWithResidents(page);
+      planets = planetList;
+      planetList = planetList.results;
     } else {
-      planets = await starWarsController.getPlanets();
+      planets = await starWarsController.getPlanets(sortBy, page);
       planetList = Object.values(planets.results);
       // planetList = Object.values(planets);
     }
@@ -44,16 +47,18 @@ async function getPlanets(req, res) {
 }
 
 async function getPeople(req, res) {
-  const { sortBy } = req.query;
+  const { sortBy, page } = req.query;
+  console.log(req.query)
 
   try {
-    const people = await starWarsController.getPeople();
+    const people = await starWarsController.getPeople(sortBy, page);
     const peopleList = Object.values(people.results);
     // const peopleList = Object.values(people);
 
     if (sortBy) {
       sorter(sortBy, peopleList);
     }
+
 
     res.json({
       ...people,

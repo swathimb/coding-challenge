@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
@@ -11,23 +11,9 @@ import People from './routes/People.jsx';
 import Breadcrumbs from './components/Breadcrumbs.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
 import TopNav from './components/TopNav.jsx';
-import Pagination from './components/Pagination.jsx';
 
 const App = () => {
-  const { loading } = useMst(store => ({
-    loading: store.loadingPlanets || store.loadingPeople,
-  }));
-
-  if (loading) {
-    return (
-      <div>
-        Loading...
-        <br />
-        This may take a bit if loading for the first time...
-      </div>
-    );
-  }
-
+  
   return (
     <div className="app">
       <CustomCursor />
@@ -42,7 +28,6 @@ const App = () => {
         <Route path="/planets/:planetId/residents/:residentId" element={<Resident />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
-      <Pagination/>
     </div>
   );
 };
