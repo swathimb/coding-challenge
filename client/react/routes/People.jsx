@@ -12,12 +12,13 @@ const People = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { people, getFilteredPeople, fetchPeople, peopleCount, peopleCurrentPage } = useMst(store => ({
+  const { loadingPeople, people, getFilteredPeople, fetchPeople, peopleCount, peopleCurrentPage } = useMst(store => ({
     people: store.people,
     getFilteredPeople: store.getFilteredPeople,
     fetchPeople: store.fetchPeople,
     peopleCount: store.peopleCount,
     peopleCurrentPage: store.peopleCurrentPage,
+    loadingPeople: store.loadingPeople
   }));
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const People = () => {
         placeholder="Filter..."
       />
       <div className="list">
-        {filteredPeople.map(person => (
+        {!loadingPeople ? filteredPeople.map(person => (
           <Link
             className="listItem"
             key={person.id}
@@ -56,7 +57,7 @@ const People = () => {
           >
             {person.name}
           </Link>
-        ))}
+        )) : <div>Loading...</div>}
       </div>
       <footer><Pagination section='people' count={peopleCount}/></footer>
       

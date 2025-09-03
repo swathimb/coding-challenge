@@ -13,12 +13,13 @@ const Planets = () => {
   const [searchTerm, setSearchTerm] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
   
-  const { planets, getFilteredPlanets, fetchPlanets, planetsCount, planetCurrentPage } = useMst(store => ({
+  const { loadingPlanets, planets, getFilteredPlanets, fetchPlanets, planetsCount, planetCurrentPage } = useMst(store => ({
     planets: store.planets,
     getFilteredPlanets: store.getFilteredPlanets,
     fetchPlanets: store.fetchPlanets,
     planetsCount: store.planetsCount,
     planetCurrentPage: store.planetCurrentPage,
+    loadingPlanets: store.loadingPlanets
   }));
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const Planets = () => {
       />
    
       <div className="list">
-        {filteredPlanets.map(planet => (
+        {!loadingPlanets ? filteredPlanets.map(planet => (
           <Link
             className="listItem"
             key={planet.id}
@@ -58,7 +59,7 @@ const Planets = () => {
           >
             {planet.name}
           </Link>
-        ))}
+        )): <div>Loading...</div>}
       </div>
 
       <footer><Pagination section='planets' count={planetsCount}/></footer>
