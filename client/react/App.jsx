@@ -22,10 +22,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/planets" replace />} />
         <Route path="/people" element={<People />} />
-        <Route path="/person/:residentId" element={<Resident />} />
+        <Route path="/person/:residentId" element={<Resident section='person'/>} />
         <Route path="/planets" element={<Planets />} />
         <Route path="/planets/:planetId" element={<Planet />} />
-        <Route path="/planets/:planetId/residents/:residentId" element={<Resident />} />
+        <Route path="/planets/:planetId/residents/:residentId" element={<Resident section='planet'/>} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </div>

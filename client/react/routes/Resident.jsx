@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import styles from './resident.scss';
@@ -6,15 +6,15 @@ import { useMst } from '../../stores/StoreProvider.js';
 import PageTitle from '../components/PageTitle.jsx';
 import SubTitle from '../components/SubTitle.jsx';
 
-const Resident = () => {
+const Resident = ({section}) => {
   const urlParams = useParams();
-  const { getPerson, getPlanet } = useMst(store => ({
-    getPerson: store.getPerson,
-    getPlanet: store.getPlanet,
+  const { getResident, getPerson } = useMst(store => ({
+    getResident: store.getResident,
+    getPerson: store.getPerson
   }));
 
-  const resident = getPerson(urlParams.residentId);
-  const planet = resident ? getPlanet(resident.homeworld?.split('/').slice(-2, -1).pop()) : {};
+  const resident = section === 'planet' ?  getResident(urlParams.residentId) : getPerson(urlParams.residentId);
+  const planet = resident ? resident.homeworld : {};
 
   if (!resident) {
     return <div>404</div>;
@@ -39,7 +39,7 @@ const Resident = () => {
         ))}
         <div className="detailItem">
           <div className="detailName">homeworld</div>
-          <div className="detailValue">{planet.name || 'unknown'}</div>
+          <div className="detailValue">{planet && planet.name || 'unknown'}</div>
         </div>
       </div>
     </div>

@@ -29,7 +29,6 @@ const People = () => {
     currentPage = peopleCurrentPage
     setSearchParams({ page: peopleCurrentPage })
   }
-  console.log(peopleCurrentPage, currentPage, searchParams.get("page"))
   if(!people.length || !!currentPage && peopleCurrentPage !== currentPage) {
       fetchPeople(currentPage);
   }
@@ -59,7 +58,7 @@ const People = () => {
           </Link>
         ))}
       </div>
-      <footer><Pagination session='people' count={peopleCount}/></footer>
+      <footer><Pagination section='people' count={peopleCount}/></footer>
       
     </div>
   );

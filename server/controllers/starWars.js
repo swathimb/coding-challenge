@@ -7,7 +7,9 @@ export default {
   getPeople,
   getPlanets,
   getPlanetsWithResidents,
-  getPlanet
+  getPlanet,
+  getPerson,
+  getHomeWorldData
 };
 
 async function getPeople(sortBy, page) {
@@ -16,7 +18,22 @@ async function getPeople(sortBy, page) {
     rootApi = rootApi + `?page=${page}`
   }
   const cacheKey = 'people';
-  return getResults(rootApi, cacheKey);
+  const peopleData = await getResults(rootApi, cacheKey);
+  const modifiedData = await Promise.all(
+    peopleData.results.map(async (item) => await getHomeWorldData(item))
+  );
+  return {
+    ...peopleData,
+    results: modifiedData
+  }
+}
+
+async function getHomeWorldData(people) {
+  const planetId = people.homeworld.split('/').slice(-2, -1).join('')
+  const { data: planetData } = await getPlanet(parseInt(planetId))
+  people.homeworld = planetData;
+  people.homeworld.id = parseInt(planetId)
+  return people;
 }
 
 async function getPlanets(sortBy, page) {
@@ -33,56 +50,43 @@ async function getPlanet(planetId) {
   return getResult(rootApi);
 }
 
-async function getPlanetsWithResidents(sortBy, page) {
-  const [planets, people] = await Promise.all([
-    getPlanets(sortBy, page),
-    getPeople(),
-  ]);
-  // cheater way to deep clone an object
-  const planetList = JSON.parse(JSON.stringify(Object.values(planets.results)));
-  const peopleList = JSON.parse(JSON.stringify(Object.values(people.results)));
+async function getPerson(personUrl) {
+  return getResult(personUrl);
+}
 
-  planetList.forEach(planet => {
-    planet.residents = planet.residents.map(url => {
-      const person = peopleList.find(person => person.url === url) || {};
-      return person.name || 'unknown';
-    });
-  });
+async function getPlanetsWithResidents(sortBy, page) {
+  const planetsData = await getPlanets(sortBy, page);
+
+  // cheater way to deep clone an object
+  const planetList = JSON.parse(JSON.stringify(Object.values(planetsData.results)));
 
   return {
-    ...planets,
+    ...planetsData,
     results: planetList,
   };
 }
-
 
 /* helper methods */
 async function getResults(rootApi, cacheKey, page = 1) {
   const startTime = new Date().valueOf();
 
-  // if (!cache[cacheKey]) {
-  //   cache[cacheKey] = {};
-  // }
-
   async function getPage(nextPage) {
     const { data } = await axios.get(nextPage);
-    console.log(data)
-    data.results && data.results.forEach(item => {
-      // const id = item.url.replace(rootApi, '').replace(/\//g, '');
-      const id = item.url.split('/').slice(-2, -1).join('')
-      item.id = parseInt(id); // make things easier for the front-end
-      // cache[cacheKey][id] = item;
-    });
-    return data;
+    if (data.results) {
+
+      const modifiedData =
+        data.results.map((item) => {
+          const id = item.url.split('/').slice(-2, -1).join('');
+          item.id = parseInt(id); // make things easier for the front-end
+          return item;
+        })
+      data.results = modifiedData;
+      return data;
+    }
   }
 
-  // const url = `${rootApi}/?page=${page}`;
   const data = await getPage(rootApi);
-
-  // return as frozen object so any mutating won't affect the cache in this file
-  // const toReturn = Object.freeze(cache[cacheKey]);
-  // console.log(`"${cacheKey}" | timing: ${new Date().valueOf() - startTime} | result count: ${Object.values(toReturn).length}`);
-  // return toReturn;
+  console.log(`${rootApi} timing: ${new Date().valueOf() - startTime} | result count: ${Object.values(data.results).length}`);
   return {
     count: data.count,
     next: data.next,
@@ -92,5 +96,8 @@ async function getResults(rootApi, cacheKey, page = 1) {
 }
 
 async function getResult(rootApi) {
-  return await axios.get(rootApi);
+  const startTime = new Date().valueOf();
+  const result = await axios.get(rootApi);
+  console.log(`${rootApi} timing: ${new Date().valueOf() - startTime}`);
+  return result
 }

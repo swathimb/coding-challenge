@@ -7,7 +7,6 @@ const Pagination = ({section, count}) => {
     let pageNumbers = Math.ceil(count/10)
     const [searchParams] = useSearchParams();
     let currentPage = searchParams.get("page");
-    console.log(currentPage, 'currentPage')
     return(
         <div className='pagination'>
         <Link  to={'/'}>{'<'}</Link>

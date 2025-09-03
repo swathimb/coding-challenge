@@ -10,7 +10,7 @@ export default {
 function getPlanets(page) {
   let queryParameters = {
     sortBy: 'name',
-    replacePeopleNames: 'false',
+    replacePeopleNames: 'true',
   }
   if (page) {
     queryParameters.page = page;
@@ -32,7 +32,7 @@ function getPeople(page) {
 }
 
 function getPerson(personId) {
-  return axios.get(`/api/starWars/people/${personId}`);
+  return axios.get(`/api/starWars/person/${personId}`);
 }
 
 function getPlanet(planetId) {

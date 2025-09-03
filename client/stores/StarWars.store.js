@@ -10,6 +10,8 @@ const StarWarsStore = model('StarWarsStore', {
   planets: optional(array(PlanetModel), []),
   people: optional(array(PersonModel), []),
 
+  residents: optional(array(PersonModel), []),
+
   loadingPlanets: optional(boolean, false),
   loadingPeople: optional(boolean, false),
 
@@ -25,7 +27,6 @@ const StarWarsStore = model('StarWarsStore', {
     },
 
     async fetchPlanets(page) {
-      console.log('In Planet Store')
       if (self.planets.length > 0 && self.peopleCurrentPage === page) return self.planets;
       self.setLoadingPlanets(true);
       const { data } = await apiService.getPlanets(page);
@@ -39,12 +40,21 @@ const StarWarsStore = model('StarWarsStore', {
       if (self.people.length > 0 && self.peopleCurrentPage === page) return self.people;
       self.setLoadingPeople(true);
       const { data } = await apiService.getPeople(page);
-      console.log('In People Store', data)
       self.setLoadingPeople(false);
       self.setPeople(data.results);
       self.setPeopleCount(data.count);
       self.setPeopleCurrentPage(page);
       return data.results;
+    },
+
+    async fetchResidentsList(residents) {
+      const allResidents = await Promise.all(residents.map(async resident => {
+        const id = resident.split('/').slice(-2, -1).join('');
+        return await apiService.getPerson(id)
+      }));
+      const allresidentsData = allResidents.map(resident => resident.data);
+      self.setResidents(allresidentsData);
+      return allresidentsData;
     },
 
     setLoadingPlanets(bool) {
@@ -58,6 +68,9 @@ const StarWarsStore = model('StarWarsStore', {
     },
     setPeople(people) {
       self.people = people;
+    },
+    setResidents(residents) {
+      self.residents = residents;
     },
     setPlanetsCount(count) {
       self.planetsCount = count;
@@ -97,6 +110,9 @@ const StarWarsStore = model('StarWarsStore', {
     getPerson(personId) {
       return self.people.find(person => person.id === parseInt(personId));
     },
+    getResident(personId) {
+      return self.residents.find(person => person.id === parseInt(personId));
+    }
   }));
 
 export default StarWarsStore;

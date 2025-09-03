@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/planets', getPlanets);
 router.get('/people', getPeople);
 router.get('/planets/:planetId', getPlanet);
+router.get('/person/:personId', getPerson);
 
 export default router;
 
@@ -23,7 +24,7 @@ async function getPlanets(req, res) {
   let planets;
   try {
     if (replacePeopleNames === 'true') {
-      planetList = await starWarsController.getPlanetsWithResidents(page);
+      planetList = await starWarsController.getPlanetsWithResidents(sortBy, page);
       planets = planetList;
       planetList = planetList.results;
     } else {
@@ -48,7 +49,6 @@ async function getPlanets(req, res) {
 
 async function getPeople(req, res) {
   const { sortBy, page } = req.query;
-  console.log(req.query)
 
   try {
     const people = await starWarsController.getPeople(sortBy, page);
@@ -77,6 +77,20 @@ async function getPlanet(req, res) {
     const { data } = await starWarsController.getPlanet(planetId);
 
     res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+}
+
+async function getPerson(req, res) {
+  const { personId } = req.params;
+  const rootApi = 'https://swapi.dev/api' + '/people' + `/${personId}`;
+  try {
+    let { data: personData } = await starWarsController.getPerson(rootApi);
+    const perosonId = personData.url.split('/').slice(-2, -1).join('');
+    personData.id = parseInt(perosonId);
+    personData = await starWarsController.getHomeWorldData(personData)
+    res.json(personData);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

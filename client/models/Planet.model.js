@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree';
 
 import PersonModel from './Person.model.js';
 
-const { model, number, string, array, maybeNull } = types;
+const { model, number, string, array } = types;
 
 const Planet = model('Planet', {
   id: number,

@@ -4,6 +4,8 @@ import { useParams, Link } from 'react-router-dom';
 import styles from './planet.scss';
 import { useMst } from '../../stores/StoreProvider.js';
 import PageTitle from '../components/PageTitle.jsx';
+import { getSnapshot } from 'mobx-state-tree';
+import ResidentsList from '../components/ResidentsList.jsx';
 import SubTitle from '../components/SubTitle.jsx';
 
 const Planet = () => {
@@ -22,7 +24,6 @@ const Planet = () => {
     !(planet[key] instanceof Array)
     && !['id', 'name', 'url', 'created', 'edited'].includes(key)
   ));
-
   return (
     <div className="planet">
       <PageTitle>{planet.name}</PageTitle>
@@ -37,22 +38,7 @@ const Planet = () => {
         ))}
       </div>
 
-      <SubTitle>Residents</SubTitle>
-      <div className="list">
-        {planet.residents.map(resident => (
-          !resident
-            ? null
-            : (
-              <Link
-                className="listItem"
-                key={resident.id}
-                to={`/planets/${urlParams.planetId}/residents/${resident.id}`}
-              >
-                {resident.name}
-              </Link>
-            )
-        ))}
-      </div>
+      <ResidentsList residents={planet.residents}/>
     </div>
   );
 };

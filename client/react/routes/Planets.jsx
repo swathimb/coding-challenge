@@ -30,7 +30,6 @@ const Planets = () => {
       currentPage = planetCurrentPage
       setSearchParams({ page: planetCurrentPage })
     }
-    console.log(planetCurrentPage, currentPage, searchParams.get("page"))
     if(!planets.length || !!currentPage && planetCurrentPage !== currentPage) {
         fetchPlanets(currentPage);
     }
@@ -62,7 +61,7 @@ const Planets = () => {
         ))}
       </div>
 
-      <footer><Pagination session='planets' count={planetsCount}/></footer>
+      <footer><Pagination section='planets' count={planetsCount}/></footer>
 
     </div>
   );

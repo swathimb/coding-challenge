@@ -1,6 +1,7 @@
 import { types } from 'mobx-state-tree';
 
-const { model, array, string, number } = types;
+const { model, array, string, number, maybe } = types;
+import Planet from './Planet.model.js';
 
 const Person = model('Person', {
   id: number,
@@ -11,7 +12,7 @@ const Person = model('Person', {
   height: string,
   mass: string,
   skin_color: string,
-  homeworld: string,
+  homeworld: types.late(() => Planet),
   films: array(string),
   species: array(string),
   starships: array(string),
